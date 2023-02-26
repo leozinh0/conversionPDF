@@ -3,8 +3,8 @@ import os
 
 class JuntarPdfs:
 
-    def __init__(self, source_dir):
-        self.source_dir = source_dir
+    def __init__(self, destiny_dir):
+        self.destiny_dir = destiny_dir
 
     def Juntar(self):
         lista = []
@@ -15,9 +15,9 @@ class JuntarPdfs:
         # Vai percorrer todos os arquivos da pasta e fazer uma filtragem para apenas arquivos que são pdf.
         # E armazenar dentro da lista em ordem o caminho do arquivo mais o nome do mesmo para que o append 
         # Possa achar e adicionar o arquivo com garantia. 
-        for arquivo in os.listdir(self.source_dir):
+        for arquivo in os.listdir(r'Z:\\Desktop\\Nova pasta'):
             if '.pdf' in arquivo:
-                var = self.source_dir + '\\' + arquivo
+                var = r'Z:\\Desktop\\Nova pasta' + '\\' + arquivo
 
             lista.insert(x,var)
             x += 1    
@@ -29,4 +29,4 @@ class JuntarPdfs:
 
         # Vai adicionar os arquivos da lista com o caminho especificado, caso não exista esse arquivo,
         # vai ser criado antes de adicionar nele.                
-        return merge.write(os.path.join("Z:\\Desktop\\Result\\Result.pdf"))
+        return merge.write(os.path.join(self.destiny_dir + 'Result.pdf'))

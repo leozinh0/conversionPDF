@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./Class"
+    ],
+    "python.linting.enabled": false
+}

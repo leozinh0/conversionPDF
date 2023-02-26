@@ -3,14 +3,10 @@ from PIL import Image
 
 class ConversaoToPdf:
 
-    def __init__(self, output_dir, source_dir):
-        self.output_dir = output_dir
+    def __init__(self, source_dir):
         self.source_dir = source_dir
 
     def Conversao(self):
-        #Pasta que serão de entrada e saída dos arquivos
-        #output_dir = r'Z:\Desktop\Finaly'
-        #source_dir = r'Z:\Desktop\pdf'
 
         lista = []
         x = 0
@@ -31,7 +27,11 @@ class ConversaoToPdf:
             if File.split('.')[-1] in ('png', 'jpg', 'jpeg') :
                 imagem = Image.open(os.path.join(self.source_dir, File))
                 imagem_converted = imagem.convert('RGB')
-                imagem_converted.save(os.path.join(self.output_dir, '{0}.pdf'.format(File.split('.')[-2])))
+                
+                if not os.path.exists(r'Z:\\Desktop\\Nova pasta'):
+                    os.makedirs(r'Z:\\Desktop\\Nova pasta')
+                
+                imagem_converted.save(os.path.join(r'Z:\\Desktop\\Nova pasta', '{0}.pdf'.format(File.split('.')[-2])))
         
         return
 
