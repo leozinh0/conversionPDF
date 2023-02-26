@@ -28,10 +28,10 @@ class ConversaoToPdf:
                 imagem = Image.open(os.path.join(self.source_dir, File))
                 imagem_converted = imagem.convert('RGB')
                 
-                if not os.path.exists(r'Z:\\Desktop\\Nova pasta'):
-                    os.makedirs(r'Z:\\Desktop\\Nova pasta')
+                if not os.path.exists(r'Z:\\Desktop\\Temporary'):
+                    os.makedirs(r'Z:\\Desktop\\Temporary')
                 
-                imagem_converted.save(os.path.join(r'Z:\\Desktop\\Nova pasta', '{0}.pdf'.format(File.split('.')[-2])))
+                imagem_converted.save(os.path.join(r'Z:\\Desktop\\Temporary', '{0}.pdf'.format(File.split('.')[-2])))
         
         return
 

@@ -1,7 +1,4 @@
 import PySimpleGUI as sg
-# from renomear_arquivo import RenomearArquivos
-# from Convert_Image_To_Pdf import ConversaoToPdf
-# from juntar_pdf import JuntarPdfs
 from Class import renomear_arquivo
 from Class import Convert_Image_To_Pdf
 from Class import juntar_pdf
@@ -35,41 +32,54 @@ layout = [
 
 window = sg.Window(
     'Converter para PDF',
-    layout    
+    layout,
+    icon = r'.\\Assets\\Logo2.ico'    
 )
 
 while True:
     event, values = window.read()
 
-    if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-        if yes == sg.popup_yes_no('Você tem certeza?'):
-            break
+    try:
+        if event == sg.WINDOW_CLOSED or event == 'Cancelar':
+            if yes == sg.popup_yes_no('Você tem certeza?',  icon= r'.\\Assets\\Logo2.ico', modal= True):
+                break
 
-    match(event):
-        case 'btnProcurarOrigem':
-            window['IptOrigem'].update(sg.popup_get_folder('Escolha a pasta de Origem'))
+        match(event):
+            case 'btnProcurarOrigem':
+                window['IptOrigem'].update(sg.popup_get_folder('Escolha a pasta de Origem', icon= r'.\\Assets\\Logo2.ico'))
 
-        case 'btnProcurarDestino':
-            window['IptDestino'].update(sg.popup_get_folder('Escolha a pasta de Destino'))
+            case 'btnProcurarDestino':
+                window['IptDestino'].update(sg.popup_get_folder('Escolha a pasta de Destino',  icon= r'.\\Assets\\Logo2.ico'))
 
-        case 'Converter':
-            if values['IptOrigem'] == '' and values['IptDestino'] == '':
-                sg.popup_no_buttons('Você esqueceu de preencher os campos', auto_close= True, auto_close_duration=7)
+            case 'Converter':
+                if values['IptOrigem'] == '' and values['IptDestino'] == '':
+                    sg.popup_no_buttons('Você esqueceu de preencher todos os campos', 
+                                        auto_close= True, 
+                                        auto_close_duration=5,  
+                                        icon= r'.\\Assets\\Logo2.ico'
+                                        )
 
-            elif values['IptOrigem'] == '':
-                sg.popup_no_buttons('Você esqueceu de escolher a pasta de Origem', auto_close= True, auto_close_duration=7)
+                elif values['IptOrigem'] == '':
+                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Origem', auto_close= True, auto_close_duration=5,  icon= r'.\\Assets\\Logo2.ico')
 
-            elif values['IptDestino'] == '':
-                sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino', auto_close= True, auto_close_duration=7)
+                elif values['IptDestino'] == '':
+                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino', auto_close= True, auto_close_duration=5, icon= r'.\\Assets\\Logo2.ico')
 
-            elif values['IptOrigem'] != '' and values['IptDestino'] != '':
-                Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['IptOrigem'])
-                Renomear.Renomear()
+                elif values['IptOrigem'] != '' and values['IptDestino'] != '':
+                    Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['IptOrigem'])
+                    Renomear.Renomear()
 
-                Transformar = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['IptOrigem'])
-                Transformar.Conversao()
+                    Transformar = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['IptOrigem'])
+                    Transformar.Conversao()
 
-                Juntar = juntar_pdf.JuntarPdfs(destiny_dir= values['IptDestino'])
-                Juntar.Juntar()
+                    JuntarPdf = juntar_pdf.JuntarPdfs(destiny_dir= values['IptDestino'])
+                    JuntarPdf.Juntar()
+
+                window['IptOrigem'].update('') 
+                window['IptDestino'].update('') 
+
+                JuntarPdf.ApagarPastaTemporaria()
+    except Exception as e:
+        sg.popup_scrolled(str(e), no_titlebar= False, icon= r'.\\Assets\\Logo2.ico')
 
 window.close()
