@@ -33,19 +33,12 @@ class JuntarPdfs:
     def ApagarPastaTemporaria(self):
 
         caminhoPasyaTemporaria = r'Z:\\Desktop\\Temporary'        
-        lista = []
-        y = 0
 
         for arquivo in os.listdir(caminhoPasyaTemporaria):
             
             var = caminhoPasyaTemporaria + '\\' + arquivo
 
-            lista.insert(y,var)
-            y += 1  
+            os.remove(var)
 
-        for arquivo in lista:
-            os.remove(arquivo)
-        
-        dirPath = caminhoPasyaTemporaria
-        os.rmdir(dirPath)
+        os.rmdir(caminhoPasyaTemporaria)
 

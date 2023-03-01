@@ -8,7 +8,7 @@ yes = 'Yes'
 sg.theme('Black')
 
 layout_esquerdo = [
-    [sg.Image(filename =r'.\\Assets\\Logo.png',
+    [sg.Image(filename =r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo.png',
               size = (350, 220),
               pad= (10,10))
     ]
@@ -33,7 +33,7 @@ layout = [
 window = sg.Window(
     'Converter para PDF',
     layout,
-    icon = r'.\\Assets\\Logo2.ico'    
+    icon = r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'    
 )
 
 while True:
@@ -41,29 +41,29 @@ while True:
 
     try:
         if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-            if yes == sg.popup_yes_no('Você tem certeza?',  icon= r'.\\Assets\\Logo2.ico', modal= True):
+            if yes == sg.popup_yes_no('Você tem certeza?',  icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico', modal= True):
                 break
 
         match(event):
             case 'btnProcurarOrigem':
-                window['IptOrigem'].update(sg.popup_get_folder('Escolha a pasta de Origem', icon= r'.\\Assets\\Logo2.ico'))
+                window['IptOrigem'].update(sg.popup_get_folder('Escolha a pasta de Origem', icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'))
 
             case 'btnProcurarDestino':
-                window['IptDestino'].update(sg.popup_get_folder('Escolha a pasta de Destino',  icon= r'.\\Assets\\Logo2.ico'))
+                window['IptDestino'].update(sg.popup_get_folder('Escolha a pasta de Destino',  icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'))
 
             case 'Converter':
                 if values['IptOrigem'] == '' and values['IptDestino'] == '':
                     sg.popup_no_buttons('Você esqueceu de preencher todos os campos', 
                                         auto_close= True, 
                                         auto_close_duration=5,  
-                                        icon= r'.\\Assets\\Logo2.ico'
+                                        icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'
                                         )
 
                 elif values['IptOrigem'] == '':
-                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Origem', auto_close= True, auto_close_duration=5,  icon= r'.\\Assets\\Logo2.ico')
+                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Origem', auto_close= True, auto_close_duration=5,  icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
 
                 elif values['IptDestino'] == '':
-                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino', auto_close= True, auto_close_duration=5, icon= r'.\\Assets\\Logo2.ico')
+                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino', auto_close= True, auto_close_duration=5, icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
 
                 elif values['IptOrigem'] != '' and values['IptDestino'] != '':
                     Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['IptOrigem'])
@@ -80,6 +80,6 @@ while True:
 
                 JuntarPdf.ApagarPastaTemporaria()
     except Exception as e:
-        sg.popup_scrolled(str(e), no_titlebar= False, icon= r'.\\Assets\\Logo2.ico')
+        sg.popup_scrolled(str(e), no_titlebar= False, icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
 
 window.close()
