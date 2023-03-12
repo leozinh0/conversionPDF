@@ -1,10 +1,12 @@
 import os
 from PIL import Image
+from tempfile import TemporaryDirectory
 
 class ConversaoToPdf:
 
-    def __init__(self, source_dir):
-        self.source_dir = source_dir
+    def __init__(self, source_dir, temp_Dir):
+       self.source_dir = source_dir
+       self.temp_Dir = temp_Dir
 
     def Conversao(self):
 
@@ -16,7 +18,6 @@ class ConversaoToPdf:
         for Arquivo in os.listdir(self.source_dir) :
 
             lista.insert(x, Arquivo)
-            
             x = x + 1  
 
         #Irá deixar deixar os arquivos em ordem graças a renomeação numerada corretamente.
@@ -28,10 +29,6 @@ class ConversaoToPdf:
                 imagem = Image.open(os.path.join(self.source_dir, File))
                 imagem_converted = imagem.convert('RGB')
                 
-                if not os.path.exists(r'Z:\\Desktop\\Temporary'):
-                    os.makedirs(r'Z:\\Desktop\\Temporary')
-                
-                imagem_converted.save(os.path.join(r'Z:\\Desktop\\Temporary', '{0}.pdf'.format(File.split('.')[-2])))
+            imagem_converted.save(os.path.join(str(self.temp_Dir), '{0}.pdf'.format(File.split('.')[-2])))
         
         return
-

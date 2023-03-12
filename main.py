@@ -2,6 +2,8 @@ import PySimpleGUI as sg
 from Class import renomear_arquivo
 from Class import Convert_Image_To_Pdf
 from Class import juntar_pdf
+import tempfile
+import os
 
 yes = 'Yes'
 
@@ -66,13 +68,19 @@ while True:
                     sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino', auto_close= True, auto_close_duration=5, icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
 
                 elif values['IptOrigem'] != '' and values['IptDestino'] != '':
-                    Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['IptOrigem'])
+
+                    caminhoDaPastaTemporay = tempfile.gettempdir() + '\\' + 'ConversionPdf'
+                    
+                    if not os.path.exists(caminhoDaPastaTemporay):
+                        os.mkdir(caminhoDaPastaTemporay)
+
+                    Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['IptOrigem']) 
                     Renomear.Renomear()
 
-                    Transformar = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['IptOrigem'])
+                    Transformar = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['IptOrigem'], temp_Dir= caminhoDaPastaTemporay)
                     Transformar.Conversao()
 
-                    JuntarPdf = juntar_pdf.JuntarPdfs(destiny_dir= values['IptDestino'])
+                    JuntarPdf = juntar_pdf.JuntarPdfs(destiny_dir= values['IptDestino'], temp_Dir= str(caminhoDaPastaTemporay))
                     JuntarPdf.Juntar()
 
                 window['IptOrigem'].update('') 
