@@ -25,7 +25,7 @@ layout_Direito = [
     [sg.Text('')],
     [sg.Text('')],
     [sg.Text('')],
-    [sg.Push(), sg.Button('Cancelar'), sg.Button('Converter')]
+    [sg.Text('@Leozinho_otto'),sg.Push(), sg.Button('Cancelar'), sg.Button('Converter')]
 ]
 
 layout = [
