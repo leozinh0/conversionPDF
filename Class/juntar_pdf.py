@@ -6,7 +6,7 @@ class JuntarPdfs:
         self.destiny_dir = destiny_dir
         self.temp_Dir = temp_Dir
 
-    def Juntar(self):
+    def Juntar(self, nomeArquivo):
         lista = []
         x = 0
 
@@ -30,7 +30,7 @@ class JuntarPdfs:
 
         # Vai adicionar os arquivos da lista com o caminho especificado, caso não exista esse arquivo,
         # vai ser criado antes de adicionar nele.                
-        return merge.write(os.path.join(self.destiny_dir + '\\' + 'Result.pdf'))
+        return merge.write(os.path.join(self.destiny_dir + '\\' + nomeArquivo + '.pdf'))
     
     def ApagarPastaTemporaria(self):        
 

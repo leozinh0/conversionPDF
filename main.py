@@ -1,26 +1,27 @@
+import os
+import tempfile
 import PySimpleGUI as sg
 from Class import renomear_arquivo
 from Class import Convert_Image_To_Pdf
-from Class import juntar_pdf
-import tempfile
-import os
-
-yes = 'Yes'
+from Class import juntar_pdf 
 
 sg.theme('Black')
 
 layout_esquerdo = [
-    [sg.Image(filename =r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo.png',
-              size = (350, 220),
-              pad= (10,10))
+    [sg.Image(filename= "Logo.png",
+              size= (350, 220),
+              pad= (10,10)
+             )
     ]
 ]
 
 layout_Direito = [
+    [sg.Text('Nome do Arquivo:')],
+    [sg.Input(key= 'edtNomeArquivo')],
     [sg.Text('Caminho de origem:')],
-    [sg.Input(key='IptOrigem'), sg.Button('Procurar', key='btnProcurarOrigem')],
+    [sg.Input(key= 'edtOrigem', default_text= 'Z:\\Desktop\\Origem'), sg.Button('Procurar', key= 'btnProcurarOrigem')],
     [sg.Text('Caminho de destino:')],
-    [sg.Input(key='IptDestino'), sg.Button('Procurar', key='btnProcurarDestino')],
+    [sg.Input(key= 'edtDestino', default_text= 'Z:\\Desktop\\Result'), sg.Button('Procurar', key= 'btnProcurarDestino')],
     [sg.Text('')],
     [sg.Text('')],
     [sg.Text('')],
@@ -35,7 +36,7 @@ layout = [
 window = sg.Window(
     'Converter para PDF',
     layout,
-    icon = r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'    
+    icon= r'Logo2.ico'
 )
 
 while True:
@@ -43,51 +44,70 @@ while True:
 
     try:
         if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-            if yes == sg.popup_yes_no('Você tem certeza?',  icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico', modal= True):
-                break
+            break
 
         match(event):
             case 'btnProcurarOrigem':
-                window['IptOrigem'].update(sg.popup_get_folder('Escolha a pasta de Origem', icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'))
+                window['edtOrigem'].update(sg.popup_get_folder('Escolha a pasta de Origem',
+                                                               keep_on_top= True, 
+                                                               icon= r'Logo2.ico'))
 
             case 'btnProcurarDestino':
-                window['IptDestino'].update(sg.popup_get_folder('Escolha a pasta de Destino',  icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'))
+                window['edtDestino'].update(sg.popup_get_folder('Escolha a pasta de Destino', 
+                                                                keep_on_top= False,
+                                                                icon= r'Logo2.ico'))
 
             case 'Converter':
-                if values['IptOrigem'] == '' and values['IptDestino'] == '':
-                    sg.popup_no_buttons('Você esqueceu de preencher todos os campos', 
+                if values['edtOrigem'] == '' and values['edtDestino'] == '' and values['edtNomeArquivo'] == '':
+                    sg.popup_no_buttons('Você esqueceu de preencher todos os campos!', 
                                         auto_close= True, 
-                                        auto_close_duration=5,  
-                                        icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico'
-                                        )
-
-                elif values['IptOrigem'] == '':
-                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Origem', auto_close= True, auto_close_duration=5,  icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
-
-                elif values['IptDestino'] == '':
-                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino', auto_close= True, auto_close_duration=5, icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
-
-                elif values['IptOrigem'] != '' and values['IptDestino'] != '':
-
-                    caminhoDaPastaTemporay = tempfile.gettempdir() + '\\' + 'ConversionPdf'
+                                        auto_close_duration= 2,  
+                                        icon= r'Logo2.ico',
+                                        title= 'AVISO')
                     
+                elif values['edtOrigem'] == '':
+                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Origem!', 
+                                        auto_close= True, 
+                                        auto_close_duration= 2,
+                                        icon= r'Logo2.ico',
+                                        title= 'AVISO')
+
+                elif values['edtDestino'] == '':
+                    sg.popup_no_buttons('Você esqueceu de escolher a pasta de Destino!', 
+                                        auto_close= True, 
+                                        auto_close_duration= 2, 
+                                        icon= r'Logo2.ico',
+                                        title= 'AVISO')
+
+                elif values['edtNomeArquivo'] == '':
+                    sg.popup_no_buttons('Você esqueceu de informar o nome do arquivo!', 
+                                        auto_close= True,
+                                        auto_close_duration= 2, 
+                                        icon= r'Logo2.ico',
+                                        title= 'AVISO',)
+
+                elif values['edtOrigem'] != '' and values['edtDestino'] != '' and values['edtNomeArquivo'] != '':
+                    caminhoDaPastaTemporay = tempfile.gettempdir() + '\\' + 'ConversionPdf'
+                
                     if not os.path.exists(caminhoDaPastaTemporay):
                         os.mkdir(caminhoDaPastaTemporay)
 
-                    Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['IptOrigem']) 
+                    Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['edtOrigem']) 
                     Renomear.Renomear()
 
-                    Transformar = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['IptOrigem'], temp_Dir= caminhoDaPastaTemporay)
-                    Transformar.Conversao()
+                    Converter = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['edtOrigem'], temp_Dir= caminhoDaPastaTemporay)
+                    Converter.Conversao()
 
-                    JuntarPdf = juntar_pdf.JuntarPdfs(destiny_dir= values['IptDestino'], temp_Dir= str(caminhoDaPastaTemporay))
-                    JuntarPdf.Juntar()
+                    Juntar = juntar_pdf.JuntarPdfs(destiny_dir= values['edtDestino'], temp_Dir= str(caminhoDaPastaTemporay))
+                    Juntar.Juntar(nomeArquivo= values['edtNomeArquivo'])
 
-                window['IptOrigem'].update('') 
-                window['IptDestino'].update('') 
+                    Juntar.ApagarPastaTemporaria()
 
-                JuntarPdf.ApagarPastaTemporaria()
-    except Exception as e:
-        sg.popup_scrolled(str(e), no_titlebar= False, icon= r'Z:\\vscode-workspace\\python\\conversionPDF\\Assets\\Logo2.ico')
+                    window['edtNomeArquivo'].update('') 
+    except Exception as MsgError:
+        sg.popup_scrolled(str(MsgError),
+                          title= 'Error',
+                          icon= r'Logo2.ico',
+                          size= (50, 10))
 
 window.close()
