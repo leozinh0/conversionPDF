@@ -1,5 +1,6 @@
 import PyPDF2
 import os
+
 class JuntarPdfs:
 
     def __init__(self, destiny_dir, temp_Dir):

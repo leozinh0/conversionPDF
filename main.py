@@ -2,8 +2,9 @@ import os
 import tempfile
 import PySimpleGUI as sg
 from Class import renomear_arquivo
-from Class import Convert_Image_To_Pdf
+from Class import Converter_Image_Para_Pdf
 from Class import juntar_pdf 
+from Class import Converter_Image_Para_Jpg 
 
 sg.theme('Black')
 
@@ -85,18 +86,24 @@ while True:
                                         auto_close_duration= 2, 
                                         icon= r'Logo2.ico',
                                         title= 'AVISO',)
+                    
+               
 
                 elif values['edtOrigem'] != '' and values['edtDestino'] != '' and values['edtNomeArquivo'] != '':
+
                     caminhoDaPastaTemporay = tempfile.gettempdir() + '\\' + 'ConversionPdf'
                 
                     if not os.path.exists(caminhoDaPastaTemporay):
                         os.mkdir(caminhoDaPastaTemporay)
 
+                    ConverterJpg = Converter_Image_Para_Jpg.ConversaoToJpg(source_dir= values['edtOrigem'])
+                    ConverterJpg.ConversaoJpg()
+
                     Renomear = renomear_arquivo.RenomearArquivos(sourceFolder= values['edtOrigem']) 
                     Renomear.Renomear()
 
-                    Converter = Convert_Image_To_Pdf.ConversaoToPdf(source_dir= values['edtOrigem'], temp_Dir= caminhoDaPastaTemporay)
-                    Converter.Conversao()
+                    ConverterPdf = Converter_Image_Para_Pdf.ConversaoToPdf(source_dir= values['edtOrigem'], temp_Dir= caminhoDaPastaTemporay)
+                    ConverterPdf.ConversaoPdf()
 
                     Juntar = juntar_pdf.JuntarPdfs(destiny_dir= values['edtDestino'], temp_Dir= str(caminhoDaPastaTemporay))
                     Juntar.Juntar(nomeArquivo= values['edtNomeArquivo'])
